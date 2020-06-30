@@ -1,4 +1,4 @@
-﻿<Sidebar>
+﻿<Sidebar >
     <SidebarContent>
         <SidebarNavigation>
             <SidebarItem>
@@ -6,6 +6,12 @@
                     <Icon Name="IconName.Dashboard" Margin="Margin.Is3.FromRight" />Dashboard
                 </SidebarLink>
             </SidebarItem>
+            <SidebarItem>
+                <SidebarLink To="/Accounts" Title="Show dashboard">
+                    <Icon Name="IconName.Mail" Margin="Margin.Is3.FromRight" />Accounts
+                </SidebarLink>
+            </SidebarItem>
+
             <SidebarItem>
                 <SidebarLink Toggled="(isOpen) => MasterSubItems.Toggle(isOpen)">
                     Master Data
@@ -85,4 +91,5 @@
     SidebarSubItem JobsSubItems;
     SidebarSubItem TimeAppSubItems;
     SidebarSubItem AdminSubItems;
+    
 }

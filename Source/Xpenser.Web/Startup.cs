@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Xpenser.UI;
 
 namespace Xpenser.Web
 {
@@ -23,15 +24,16 @@ namespace Xpenser.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services
-.AddBlazorise(options =>
-{
-options.ChangeTextOnKeyPress = true;
-})
-.AddBootstrapProviders()
-.AddFontAwesomeIcons();
+                .AddBlazorise(options =>
+                            {
+                            options.ChangeTextOnKeyPress = true;
+                            })
+                            .AddBootstrapProviders()
+                            .AddFontAwesomeIcons();
             services.AddRazorPages();
             services.AddServerSideBlazor();
-           
+            services.AddSingleton<appState>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

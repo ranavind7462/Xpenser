@@ -12,33 +12,34 @@
                     </a>
                 </div>
             </BarBrand>
-            <BarMenu>
-                <BarEnd>
-                    <BarItem>
-                        <BarDropdown>
-                            <BarDropdownToggle>More</BarDropdownToggle>
-                            <BarDropdownMenu>
-                                <BarDropdownItem To="https://blazorise.com/docs/quick-start/">
-                                    Quick-Start Guide
-                                </BarDropdownItem>
-                                <BarDropdownItem To="https://blazorise.com/docs/usage/">
-                                    Usage
-                                </BarDropdownItem>
-                            </BarDropdownMenu>
-                        </BarDropdown>
-                    </BarItem>
-                </BarEnd>
-            </BarMenu>
+            <BarBrand>
+                <Icon Name="@("fa fa-bars")" @onclick="ToggleNavMenu" />
+            </BarBrand>
         </Bar>
     </LayoutHeader>
-    <LayoutSider>
-        <LayoutSiderContent>
-            <NavMenu />
-        </LayoutSiderContent>
-    </LayoutSider>
-    <LayoutContent Padding="Padding.Is4.OnX">
-        @Body
-    </LayoutContent>
+    <div class="row">
+        <div class="col-sm-2 col-lg-2 col-md-2 col-xs-2 @NavMenuCssClass" id="navbarToggleExternalContent"  >
+            <LayoutSider>
+                <LayoutSiderContent>
+                    <NavMenu />
+                </LayoutSiderContent>
+            </LayoutSider>
+        </div>
+        <div class="col-sm-10 col-lg-10 col-md-10 col-xs-10">
+            <LayoutContent Padding="Padding.Is4.OnX">
+                @Body
+            </LayoutContent>
+        </div>
+    </div>
 </Layout>
+@code{
+    private bool collapseNavMenu = false;
 
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+}

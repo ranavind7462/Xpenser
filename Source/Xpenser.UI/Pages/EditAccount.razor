@@ -1,0 +1,73 @@
+﻿@page "/Account"
+@using Xpenser.Models;
+@using System.Net.Http.Json;
+@inject appState AppState;
+
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+<div class="row">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <label for="AccountName" class="control-label">Account Name</label>
+                <input for="AccountName" class="form-control" @bind-value="@account.AcccountName" />
+                <input type="hidden" @bind-value="@account.AccountId" />
+            </div>
+            <div class="form-group">
+                <label for="AccountType" class="control-label">Account Type</label>
+                <input for="AccountType" class="form-control" @bind-value="@account.AcType" />
+
+            </div>
+            <div class="form-group">
+                <label for="AccountNumber" class="control-label">Account Number</label>
+                <input for="AccountNumber" class="form-control" @bind-value="@account.AcNumber" />
+
+            </div>
+            <div class="form-group">
+                <label for="IconPath" class="control-label">Icon Path</label>
+                <input for="IconPath" class="form-control" @bind-value="@account.IconPath" />
+
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" @onclick="() => UpdateAccount()">Save</button>
+                <button type="button" class="btn btn-danger" @onclick="() => cancel()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+@code  {
+
+    Account account = new Account();
+    string BaseURL = "https://localhost:44300/api/Accounts/";
+    protected override async Task OnInitializedAsync()
+    {
+        AppState.OnChange += StateHasChanged;
+        if (AppState.AccountId != 0)
+        {
+            HttpClient httpClient = new HttpClient();
+            var url = BaseURL + AppState.AccountId;
+            account = await httpClient.GetFromJsonAsync<Account>(url);
+        }
+
+    }
+    protected async Task UpdateAccount()
+    {
+        HttpClient httpClient = new HttpClient();
+        var url = BaseURL;
+        if (AppState.AccountId != 0)
+        {
+            url = url + AppState.AccountId;
+
+            await httpClient.PutAsJsonAsync(url, account);
+        }
+        else
+        {
+            await httpClient.PostAsJsonAsync(url, account);
+        }
+        // await articleManager.Update(articleEntity);
+        navigationManager.NavigateTo("/Accounts");
+    }
+    void cancel()
+    {
+        navigationManager.NavigateTo("/articlelist");
+    }
+}

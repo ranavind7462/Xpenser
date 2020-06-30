@@ -1,13 +1,16 @@
+using Dapper.Contrib.Extensions;
 using System;
 
 namespace Xpenser.Models
 {
+	[Table("Accounts")]
 	public class Account
 	{
 		#region Properties
 		/// <summary>
 		/// Gets or sets the AccountId value.
 		/// </summary>
+		[Key]
 		public long AccountId
 		{ get; set; }
 

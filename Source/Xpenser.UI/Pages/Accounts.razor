@@ -1,0 +1,102 @@
+﻿@layout MainLayout
+@page "/Accounts"
+@using Xpenser.Models;
+@using System.Net.Http.Json;
+@inject NavigationManager UriHelper
+@inject appState AppState; 
+
+<h3>Accounts</h3>
+<br />
+
+@*<DataGrid TItem="Account"
+              Data="@accountList" EditMode="DataGridEditMode.Popup" Editable="true">
+        <DataGridCommandColumn TItem="Account" />
+        <DataGridColumn TItem="Account" Field="@nameof(Account.AccountId)" Caption="#" Sortable="false" />
+        <DataGridColumn TItem="Account" Field="@nameof(Account.AcccountName)" Caption="Account Name"  />
+        <DataGridColumn TItem="Account" Field="@nameof(Account.AcNumber)" Caption="Acc #"  />
+        <DataGridColumn TItem="Account" Field="@nameof(Account.AcType)" Caption="AcType"  />
+        <DataGridColumn TItem="Account" Field="@nameof(Account.IconPath)" Caption="IconPath"  />
+        <DataGridColumn TItem="Account" Field="@nameof(Account.OpenBal)" Caption="OpenBal"  />
+        <DataGridColumn TItem="Account" Field="@nameof(Account.StartDate)" Caption="StartDate" />
+        <DataGridCommandColumn TItem="Account">
+            <NewCommandTemplate>
+                <Button Color="Color.Success" Clicked="@context.Clicked">New</Button>
+            </NewCommandTemplate>
+            <EditCommandTemplate>
+                <Button Color="Color.Primary" Clicked="@context.Clicked">Edit</Button>
+            </EditCommandTemplate>
+        </DataGridCommandColumn>
+
+    </DataGrid>*@
+
+<Table Striped="true">
+    <TableHeader>
+        <TableRow>
+            <TableHeaderCell>#</TableHeaderCell>
+            <TableHeaderCell>Account Name</TableHeaderCell>
+            <TableHeaderCell>Acctype</TableHeaderCell>
+            <TableHeaderCell>Acc #</TableHeaderCell>
+            <TableHeaderCell>Icon Path</TableHeaderCell>
+            <TableHeaderCell>Open Bal</TableHeaderCell>
+            <TableHeaderCell>Start Date</TableHeaderCell>
+            <TableHeaderCell>
+                <a class="btn btn-primary" @onclick="() => EditAccount(0)" >New</a>
+            </TableHeaderCell>
+        </TableRow>
+    </TableHeader>
+    <TableBody>
+        @foreach (Account item in accountList)
+        {
+            <TableRow>
+                <TableRowHeader>@item.AccountId</TableRowHeader>
+                <TableRowCell>@item.AcccountName</TableRowCell>
+                <TableRowCell>@item.AcType</TableRowCell>
+                <TableRowCell>@item.AcNumber</TableRowCell>
+                <TableRowCell>@item.IconPath</TableRowCell>
+                <TableRowCell>@item.OpenBal</TableRowCell>
+                <TableRowCell>@item.StartDate</TableRowCell>
+                <TableRowCell>
+                    <a class="btn btn-primary" @onclick="() => EditAccount(item.AccountId)">Edit</a>  |
+                    <a class="btn btn-danger" @onclick="() => DeleteAccount(item.AccountId)">Delete</a>
+
+                </TableRowCell>
+
+            </TableRow>
+        }
+    </TableBody>
+</Table>
+
+@code {
+    [CascadingParameter] EditAccount editAccount { get; set; }
+    List<Account> accountList = new List<Account>();
+    int totalAccounts;
+    string baseUrl = "https://localhost:44300/api/Accounts/";
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAccounts();
+    }
+
+    private async Task GetAccounts()
+    {
+        HttpClient httpClient = new HttpClient();
+        var result = await httpClient.GetFromJsonAsync<List<Account>>(baseUrl);
+        accountList = result;
+        StateHasChanged();
+    }
+
+    protected async Task DeleteAccount(long id)
+    {
+        var url = baseUrl + id;
+        HttpClient httpClient = new HttpClient();
+        await httpClient.DeleteAsync(url);
+        await GetAccounts();
+
+    }
+    protected async Task EditAccount(long id)
+    {
+        AppState.AccountId = id;
+        UriHelper.NavigateTo("Account");
+    }
+
+}
+

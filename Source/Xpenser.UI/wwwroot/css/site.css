@@ -10110,6 +10110,10 @@ ul.inbox-nav {
     .img-container {
         min-height: 469px;
     }
+   
+   .sidebarPosition{
+       width: 20px !important;
+   }
 }
 
 @media (max-width: 768px) {
